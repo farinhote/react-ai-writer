@@ -13,10 +13,11 @@ export const useJinaSearch = () => {
   const searchWithJina = async (searchText: string) => {
     try {
       setIsJinaSearching(true);
-      const response = await axios.post('http://localhost:5000/api/jina/search', {
+      const API_URL = process.env.REACT_APP_API_URL;
+      const response = await axios.post(`${API_URL}/jina/search`, {
         query: searchText
       });
-      
+
       // Make sure we're setting an array
       if (Array.isArray(response.data.results)) {
         setJinaSearchResults(response.data.results);
@@ -36,12 +37,12 @@ export const useJinaSearch = () => {
   const handleReferencesHover = (e: React.MouseEvent) => {
     const targetElement = e.currentTarget as HTMLElement;
     const rect = targetElement.getBoundingClientRect();
-    
+
     setReferencesSubmenuPosition({
       x: rect.right,
       y: rect.top
     });
-    
+
     setShowReferencesSubmenu(true);
   };
 

@@ -13,9 +13,10 @@ export const useFiles = () => {
   // Load user files
   const fetchUserFiles = useCallback(async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/files');
+      const API_URL = process.env.REACT_APP_API_URL;
+      const response = await axios.get(`${API_URL}/files`);
       setFiles(response.data);
-      
+
       // Set active file to first file if none selected
       if (response.data.length > 0 && !activeFile) {
         setActiveFile(response.data[0]);
@@ -30,13 +31,14 @@ export const useFiles = () => {
     if (!newFileName.trim()) {
       return;
     }
-    
+
     try {
-      const response = await axios.post('http://localhost:5000/api/files', {
+      const API_URL = process.env.REACT_APP_API_URL;
+      const response = await axios.post(`${API_URL}/files`, {
         title: newFileName,
         content: '# ' + newFileName + '\n\nStart typing...'
       });
-      
+
       setFiles([...files, response.data]);
       setActiveFile(response.data);
       setMarkdown(response.data.content);
@@ -50,19 +52,20 @@ export const useFiles = () => {
   // Save the current file
   const saveFile = async () => {
     if (!activeFile) return;
-    
+
     setIsSaving(true);
-    
+
     try {
-      const response = await axios.put(`http://localhost:5000/api/files/${activeFile.id}`, {
+      const API_URL = process.env.REACT_APP_API_URL;
+      const response = await axios.put(`${API_URL}/files/${activeFile.id}`, {
         content: markdown
       });
-      
+
       // Update the files state
-      const updatedFiles = files.map(file => 
+      const updatedFiles = files.map(file =>
         file.id === activeFile.id ? { ...file, content: markdown, updatedAt: response.data.updatedAt } : file
       );
-      
+
       setFiles(updatedFiles);
       setActiveFile({ ...activeFile, content: markdown, updatedAt: response.data.updatedAt });
     } catch (error) {
@@ -75,12 +78,13 @@ export const useFiles = () => {
   // Delete a file
   const deleteFile = async (fileId: number) => {
     try {
-      await axios.delete(`http://localhost:5000/api/files/${fileId}`);
-      
+      const API_URL = process.env.REACT_APP_API_URL;
+      await axios.delete(`${API_URL}/files/${fileId}`);
+
       // Update the files state
       const updatedFiles = files.filter(file => file.id !== fileId);
       setFiles(updatedFiles);
-      
+
       // If active file was deleted, set new active file
       if (activeFile && activeFile.id === fileId) {
         if (updatedFiles.length > 0) {
@@ -110,7 +114,7 @@ export const useFiles = () => {
         saveFile();
       }
     }, 2000);
-    
+
     return () => clearTimeout(saveTimer);
   }, [markdown, activeFile]);
 
