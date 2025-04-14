@@ -2,6 +2,11 @@ const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+require('dotenv').config();
+
+// Controllers
+const fileController = require('./controllers/file.controller');
+const aiController = require('./controllers/ai.controller');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -30,7 +35,7 @@ const authenticateToken = (req, res, next) => {
   }
 };
 
-// Routes
+// Auth Routes
 app.post('/api/auth/register', async (req, res) => {
   const { name, email, password } = req.body;
   
@@ -89,6 +94,16 @@ app.get('/api/users/me', authenticateToken, (req, res) => {
   
   res.status(200).json({ id: user.id, name: user.name, email: user.email });
 });
+
+// File Routes
+app.post('/api/files', authenticateToken, fileController.createFile);
+app.get('/api/files', authenticateToken, fileController.getUserFiles);
+app.get('/api/files/:fileId', authenticateToken, fileController.getFile);
+app.put('/api/files/:fileId', authenticateToken, fileController.updateFile);
+app.delete('/api/files/:fileId', authenticateToken, fileController.deleteFile);
+
+// AI Routes
+app.post('/api/ai/process', authenticateToken, aiController.processText);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
