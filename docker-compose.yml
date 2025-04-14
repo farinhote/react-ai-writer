@@ -6,22 +6,21 @@ services:
       context: ./client
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
-    volumes:
-      - ./client:/app
-      - /app/node_modules
-    depends_on:
-      - server
-
+      - "80:3000"
+    restart: always
+    environment:
+      - NODE_ENV=production
+      
   server:
     build:
       context: ./server
       dockerfile: Dockerfile
     ports:
       - "5000:5000"
-    volumes:
-      - ./server:/app
-      - /app/node_modules
+    restart: always
     environment:
-      - NODE_ENV=development
-      - JWT_SECRET=mysecretkey
+      - NODE_ENV=production
+      - JWT_SECRET=${JWT_SECRET:-your_secure_jwt_secret}
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+      - DEEPSEEK_BASE_URL=${DEEPSEEK_BASE_URL}
+      - JINA_API_KEY=${JINA_API_KEY}
