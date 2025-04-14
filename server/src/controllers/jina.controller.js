@@ -16,7 +16,6 @@ const searchWeb = async (req, res) => {
     }
 
     const searchResults = await jinaService.searchWeb(query);
-    console.log(searchResults)
     // Parse the search results string into a structured array
     const parsedResults = [];
 
