@@ -40,7 +40,9 @@ const Editor: React.FC<EditorProps> = ({
           <MDEditor
             value={markdown}
             onChange={(value) => setMarkdown(value || '')}
-            height={600}
+            height="100%"
+            visibleDragbar={false}
+            preview="edit"
           />
         </div>
       )}

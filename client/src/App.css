@@ -24,6 +24,9 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   overflow: hidden;
+  height: calc(100vh - 120px);
+  display: flex;
+  flex-direction: column;
 }
 
 /* Context menu styles */
@@ -95,8 +98,13 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Modal styles */
@@ -136,7 +144,8 @@
   font-weight: bold;
 }
 
-.form-group input, .form-group textarea {
+.form-group input,
+.form-group textarea {
   width: 100%;
   padding: 10px;
   border: 1px solid #ddd;
@@ -231,8 +240,10 @@
 .dashboard-container {
   display: flex;
   padding: 20px;
-  max-width: 1200px;
+  max-width: 1600px;
   margin: 0 auto;
+  height: 100vh;
+  box-sizing: border-box;
 }
 
 .sidebar {
@@ -242,6 +253,9 @@
 
 .main-content {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 40px);
 }
 
 /* Create File Modal */
