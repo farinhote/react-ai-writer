@@ -1,0 +1,10 @@
+{
+  "name": "simple-ai-writer",
+  "version": "1.0.0",
+  "description": "Simple AI Writer app",
+  "scripts": {
+    "start": "docker-compose up",
+    "build": "docker-compose build",
+    "dev": "docker-compose up"
+  }
+}
