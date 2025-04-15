@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import splashImage from './../assets/splash_image.png';
 
@@ -8,14 +8,24 @@ const SplashPage: React.FC = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [formSubmitting, setFormSubmitting] = useState(false);
 
-  const { login, register, error } = useAuth();
+  const { login, register, error, isAuthenticated, loading } = useAuth();
   const navigate = useNavigate();
+
+  // If user is already authenticated, redirect to dashboard
+  if (isAuthenticated && !loading) {
+    return <Navigate to="/dashboard" />;
+  }
+
+  // Show loading indicator while checking auth status
+  if (loading && !formSubmitting) {
+    return <div className="loading-container">Loading...</div>;
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    setFormSubmitting(true);
 
     try {
       if (activeTab === 'login') {
@@ -23,11 +33,11 @@ const SplashPage: React.FC = () => {
       } else {
         await register(name, email, password);
       }
-      navigate('/dashboard');
+      // No need to navigate here - the useEffect will do it
     } catch (err) {
       console.error('Auth error:', err);
     } finally {
-      setLoading(false);
+      setFormSubmitting(false);
     }
   };
 
@@ -92,8 +102,8 @@ const SplashPage: React.FC = () => {
               />
             </div>
 
-            <button type="submit" disabled={loading}>
-              {loading ? 'Processing...' : activeTab === 'login' ? 'Login' : 'Register'}
+            <button type="submit" disabled={formSubmitting || loading}>
+              {(formSubmitting || loading) ? 'Processing...' : activeTab === 'login' ? 'Login' : 'Register'}
             </button>
           </form>
         </div>

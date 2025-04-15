@@ -8,7 +8,11 @@ import ThemeToggle from './components/ThemeToggle';
 import './App.css';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, loading } = useAuth();
+  
+  if (loading) {
+    return <div className="loading-spinner">Loading...</div>;
+  }
   
   if (!isAuthenticated) {
     return <Navigate to="/" />;
