@@ -101,13 +101,14 @@ To deploy the application to your server:
 
 1. Clone the repository on your server
 2. Run the deployment script:
+3. Add you env variables to server/.env
 
 ```bash
 ./deploy.sh
 ```
 
-3. When prompted, enter your server's domain name or IP address
-4. Start the application in production mode:
+4. When prompted, enter your server's domain name or IP address
+5. Start the application in production mode:
 
 ```bash
 docker-compose up -d --build
