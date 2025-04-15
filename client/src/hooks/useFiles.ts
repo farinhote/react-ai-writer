@@ -50,7 +50,7 @@ export const useFiles = () => {
   };
 
   // Save the current file
-  const saveFile = async () => {
+  const saveFile = useCallback(async () => {
     if (!activeFile) return;
 
     setIsSaving(true);
@@ -73,7 +73,7 @@ export const useFiles = () => {
     } finally {
       setIsSaving(false);
     }
-  };
+  }, [activeFile, markdown, files, setFiles, setActiveFile]);
 
   // Delete a file
   const deleteFile = async (fileId: number) => {
@@ -116,7 +116,7 @@ export const useFiles = () => {
     }, 2000);
 
     return () => clearTimeout(saveTimer);
-  }, [markdown, activeFile]);
+  }, [markdown, activeFile, saveFile]);
 
   // Initial load
   useEffect(() => {
