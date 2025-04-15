@@ -11,11 +11,12 @@ const processText = async (req, res) => {
     
     if (!text || !action || !description) {
       return res.status(400).json({ 
-        message: 'Text, action, and description are required' 
+        success: false,
+        content: 'Text, action, and description are required'
       });
     }
     
-    const processedText = await aiService.processText(
+    const result = await aiService.processText(
       text,
       action,
       description,
@@ -23,13 +24,24 @@ const processText = async (req, res) => {
       contextAfter || ''
     );
     
+    // If the AI processing was not successful, return a 422 error
+    if (!result.success) {
+      return res.status(422).json({
+        success: false,
+        content: result.content
+      });
+    }
+    
+    // Success - return the processed text
     res.status(200).json({ 
-      processedText 
+      success: true,
+      processedText: result.content 
     });
   } catch (error) {
     console.error('Error processing text with AI:', error);
     res.status(500).json({ 
-      message: `AI processing failed: ${error.message}` 
+      success: false,
+      content: `AI processing failed: ${error.message}` 
     });
   }
 };
