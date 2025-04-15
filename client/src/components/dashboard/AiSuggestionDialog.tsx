@@ -1,5 +1,4 @@
 import React from 'react';
-import { useTheme } from '../../context/ThemeContext';
 import './AiSuggestionDialog.css';
 
 interface AiSuggestionDialogProps {
@@ -19,7 +18,6 @@ const AiSuggestionDialog: React.FC<AiSuggestionDialogProps> = ({
   onReject,
   action
 }) => {
-  const { isDarkMode } = useTheme();
   
   if (!isVisible) return null;
 
