@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import MDEditor from '@uiw/react-md-editor';
+import { useTheme } from '../../context/ThemeContext';
 
 interface EditorProps {
   activeFile: {
@@ -23,17 +24,18 @@ const Editor: React.FC<EditorProps> = ({
   handleContextMenu,
 }) => {
   const editorRef = useRef<HTMLDivElement>(null);
+  const { isDarkMode } = useTheme();
 
   return (
     <div className="main-content">
       <h1 style={{ marginBottom: '20px' }}>
         {activeFile ? activeFile.title : 'No File Selected'}
-        {isSaving && <span style={{ fontSize: '14px', marginLeft: '10px', color: '#888' }}>Saving...</span>}
+        {isSaving && <span style={{ fontSize: '14px', marginLeft: '10px', color: 'var(--text-muted)' }}>Saving...</span>}
       </h1>
-      
+
       {activeFile && (
-        <div 
-          className="editor-container" 
+        <div
+          className="editor-container"
           ref={editorRef}
           onContextMenu={handleContextMenu}
         >
@@ -43,6 +45,7 @@ const Editor: React.FC<EditorProps> = ({
             height="100%"
             visibleDragbar={false}
             preview="edit"
+            data-color-mode={isDarkMode ? "dark" : "light"}
           />
         </div>
       )}

@@ -1,0 +1,101 @@
+/* Dark mode overrides for MD Editor */
+html[data-color-mode="dark"] .w-md-editor {
+  color: var(--text-primary) !important;
+  background-color: var(--background-secondary) !important;
+}
+
+html[data-color-mode="dark"] .w-md-editor-toolbar {
+  background-color: var(--background-tertiary) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+html[data-color-mode="dark"] .w-md-editor-toolbar li button {
+  color: var(--text-secondary) !important;
+}
+
+html[data-color-mode="dark"] .w-md-editor-toolbar li button:hover {
+  color: var(--text-primary) !important;
+  background-color: var(--hover-background) !important;
+}
+
+html[data-color-mode="dark"] .w-md-editor-toolbar svg {
+  fill: var(--text-secondary) !important;
+}
+
+html[data-color-mode="dark"] .w-md-editor-toolbar li.active button {
+  color: var(--accent-color) !important;
+}
+
+html[data-color-mode="dark"] .w-md-editor-toolbar li.active button svg {
+  fill: var(--accent-color) !important;
+}
+
+html[data-color-mode="dark"] .w-md-editor-text-pre>code,
+html[data-color-mode="dark"] .w-md-editor-text-input {
+  color: var(--text-primary) !important;
+}
+
+html[data-color-mode="dark"] .w-md-editor-preview {
+  background-color: var(--background-secondary) !important;
+  color: var(--text-primary) !important;
+}
+
+html[data-color-mode="dark"] .wmde-markdown {
+  background-color: var(--background-secondary) !important;
+  color: var(--text-primary) !important;
+}
+
+html[data-color-mode="dark"] .w-md-editor-toolbar-divider {
+  background-color: var(--border-color) !important;
+}
+
+/* Light mode styling for MD Editor */
+html[data-color-mode="light"] .w-md-editor {
+  color: var(--text-primary) !important;
+  background-color: var(--background-secondary) !important;
+}
+
+html[data-color-mode="light"] .w-md-editor-toolbar {
+  background-color: var(--background-tertiary) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+html[data-color-mode="light"] .w-md-editor-toolbar li button {
+  color: var(--text-secondary) !important;
+}
+
+html[data-color-mode="light"] .w-md-editor-toolbar li button:hover {
+  color: var(--text-primary) !important;
+  background-color: var(--hover-background) !important;
+}
+
+html[data-color-mode="light"] .w-md-editor-toolbar svg {
+  fill: var(--text-secondary) !important;
+}
+
+html[data-color-mode="light"] .w-md-editor-toolbar li.active button {
+  color: var(--accent-color) !important;
+}
+
+html[data-color-mode="light"] .w-md-editor-toolbar li.active button svg {
+  fill: var(--accent-color) !important;
+}
+
+html[data-color-mode="light"] .w-md-editor-text-pre>code,
+html[data-color-mode="light"] .w-md-editor-text-input {
+  color: var(--text-primary) !important;
+}
+
+html[data-color-mode="light"] .w-md-editor-preview {
+  background-color: var(--background-secondary) !important;
+  color: var(--text-primary) !important;
+}
+
+html[data-color-mode="light"] .wmde-markdown {
+  background-color: var(--background-secondary) !important;
+  color: var(--text-primary) !important;
+}
+
+html[data-color-mode="light"] .w-md-editor-toolbar-divider {
+  background-color: var(--border-color) !important;
+}
