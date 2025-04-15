@@ -12,6 +12,7 @@ import Sidebar from '../components/dashboard/Sidebar';
 import Editor from '../components/dashboard/Editor';
 import ContextMenu from '../components/dashboard/ContextMenu';
 import ProcessingOverlay from '../components/dashboard/ProcessingOverlay';
+import AiSuggestionDialog from '../components/dashboard/AiSuggestionDialog';
 import CreateFileModal from '../components/modals/CreateFileModal';
 import AddActionModal from '../components/modals/AddActionModal';
 
@@ -53,10 +54,14 @@ const Dashboard: React.FC = () => {
     showAddActionForm,
     newAction,
     aiActions,
+    showSuggestion,
+    currentSuggestion,
     setShowAddActionForm,
     setNewAction,
     addAiAction,
-    doAiAction
+    doAiAction,
+    acceptSuggestion,
+    rejectSuggestion
   } = useAiActions();
   
   const {
@@ -156,6 +161,18 @@ const Dashboard: React.FC = () => {
         isProcessing={isProcessing}
         processingMessage={processingMessage}
       />
+      
+      {/* AI Suggestion Dialog */}
+      {currentSuggestion && (
+        <AiSuggestionDialog
+          isVisible={showSuggestion}
+          originalText={currentSuggestion.originalText}
+          suggestedText={currentSuggestion.suggestedText}
+          action={currentSuggestion.action}
+          onAccept={acceptSuggestion}
+          onReject={rejectSuggestion}
+        />
+      )}
       
       {/* Modals */}
       <CreateFileModal

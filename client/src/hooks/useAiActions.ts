@@ -2,11 +2,25 @@ import { useState } from 'react';
 import axios from 'axios';
 import { AiAction } from '../types';
 
+interface SuggestionData {
+  originalText: string;
+  suggestedText: string;
+  expandedStart: number;
+  expandedEnd: number;
+  markdown: string;
+  setMarkdown: (value: string) => void;
+  action: string;
+}
+
 export const useAiActions = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [processingMessage, setProcessingMessage] = useState('');
   const [showAddActionForm, setShowAddActionForm] = useState(false);
   const [newAction, setNewAction] = useState<AiAction>({ action: '', description: '' });
+  
+  // State for suggestion confirmation
+  const [showSuggestion, setShowSuggestion] = useState(false);
+  const [currentSuggestion, setCurrentSuggestion] = useState<SuggestionData | null>(null);
 
   // Default AI actions
   const [aiActions, setAiActions] = useState<AiAction[]>([
@@ -23,6 +37,28 @@ export const useAiActions = () => {
       setNewAction({ action: '', description: '' });
       setShowAddActionForm(false);
     }
+  };
+
+  // Accept the current suggestion
+  const acceptSuggestion = () => {
+    if (!currentSuggestion) return;
+    
+    const { suggestedText, expandedStart, expandedEnd, markdown, setMarkdown } = currentSuggestion;
+    
+    // Apply suggestion
+    const beforeSelection = markdown.substring(0, expandedStart);
+    const afterSelection = markdown.substring(expandedEnd);
+    const newText = `${beforeSelection}${suggestedText}${afterSelection}`;
+    
+    setMarkdown(newText);
+    setShowSuggestion(false);
+    setCurrentSuggestion(null);
+  };
+  
+  // Reject the current suggestion
+  const rejectSuggestion = () => {
+    setShowSuggestion(false);
+    setCurrentSuggestion(null);
   };
 
   // AI action function
@@ -76,6 +112,16 @@ export const useAiActions = () => {
         contextAfter: afterContext
       });
 
+      // Check if the request was successful
+      if (!response.data.success) {
+        // Handle content policy violation or other issues
+        const errorMessage = response.data.content || 'AI processing failed due to content policy violation';
+        console.error('AI processing unsuccessful:', errorMessage);
+        setProcessingMessage(`Error: ${errorMessage}`);
+        setIsProcessing(false);
+        return; // Exit early
+      }
+
       let processedText = response.data.processedText;
 
       // Preserve whitespace by examining the original text
@@ -92,19 +138,40 @@ export const useAiActions = () => {
         processedText = processedText.replace(/\s*$/, '') + originalTrailingWhitespace;
       }
 
-      // Replace the expanded text with processed text
-      const beforeSelection = markdown.substring(0, expandedStart);
-      const afterSelection = markdown.substring(expandedEnd);
-      const newText = `${beforeSelection}${processedText}${afterSelection}`;
-
-      setMarkdown(newText);
+      // Instead of directly applying changes, show confirmation dialog
+      setCurrentSuggestion({
+        originalText: expandedText,
+        suggestedText: processedText,
+        expandedStart,
+        expandedEnd,
+        markdown,
+        setMarkdown,
+        action
+      });
+      
+      setShowSuggestion(true);
       setIsProcessing(false);
       setProcessingMessage('');
 
     } catch (error) {
       console.error('Error calling AI service:', error);
       setIsProcessing(false);
-      setProcessingMessage(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      
+      // Check if this is an axios error with a response
+      if (axios.isAxiosError(error) && error.response?.data) {
+        const responseData = error.response.data;
+        
+        // If we have a structured error response with content
+        if (responseData && responseData.content) {
+          setProcessingMessage(`Error: ${responseData.content}`);
+        } else if (error.response.status === 422) {
+          setProcessingMessage('Error: Content policy violation');
+        } else {
+          setProcessingMessage(`Error: ${error.message}`);
+        }
+      } else {
+        setProcessingMessage(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      }
     }
   };
 
@@ -114,10 +181,14 @@ export const useAiActions = () => {
     showAddActionForm,
     newAction,
     aiActions,
+    showSuggestion,
+    currentSuggestion,
     setShowAddActionForm,
     setNewAction,
     addAiAction,
-    doAiAction
+    doAiAction,
+    acceptSuggestion,
+    rejectSuggestion
   };
 };
 

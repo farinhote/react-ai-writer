@@ -33,18 +33,18 @@ const AddActionModal: React.FC<AddActionModalProps> = ({
               required
             />
           </div>
-          
+
           <div className="form-group">
             <label htmlFor="action-description">Instructions:</label>
             <textarea
               id="action-description"
-              placeholder="Describe how the AI should process the text..."
+              placeholder="Describe how the AI should process the text, you can add emotions, writing styles, characters with detailed descriptions etc..."
               value={newAction.description}
               onChange={(e) => setNewAction({ ...newAction, description: e.target.value })}
               required
             />
           </div>
-          
+
           <div className="form-actions">
             <button type="button" onClick={() => setShowAddActionForm(false)}>Cancel</button>
             <button type="submit">Add Action</button>
