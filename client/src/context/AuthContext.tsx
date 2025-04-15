@@ -38,7 +38,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const fetchUser = async () => {
     try {
       const API_URL = process.env.REACT_APP_API_URL;
-      const response = await axios.post(`${API_URL}/users/me`);
+      const response = await axios.get(`${API_URL}/users/me`);
       setUser(response.data);
       setIsAuthenticated(true);
     } catch (err) {
